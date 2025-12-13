@@ -1,0 +1,11 @@
+{
+  "failureThreshold": 3,
+  "failureRateThreshold": 80,
+  "timeWindowDays": 7,
+  "excludeRepositories": [],
+  "safelistWorkflows": [],
+  "dryRun": true,
+  "organization": "InfinityXOneSystems",
+  "maxConcurrentRequests": 5,
+  "backupDirectory": "workflow-backups"
+}
