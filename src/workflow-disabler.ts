@@ -216,10 +216,11 @@ export class WorkflowDisabler {
     }
 
     if (options.workflow) {
+      const workflowFilter = options.workflow;
       workflowsToRestore = workflowsToRestore.filter((w) =>
-        w.originalPath.includes(options.workflow!)
+        w.originalPath.includes(workflowFilter)
       );
-      console.log(`Filtering by workflow: ${options.workflow}`);
+      console.log(`Filtering by workflow: ${workflowFilter}`);
     }
 
     if (workflowsToRestore.length === 0) {

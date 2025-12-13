@@ -248,7 +248,11 @@ export class WorkflowAnalyzer {
         }
       }
     } catch (error: any) {
-      console.error(`Error parsing workflow ${repo}:${workflowPath}:`, error.message);
+      console.error(
+        `Error parsing YAML workflow ${repo}:${workflowPath}:`,
+        error.message,
+        '\nThe workflow file may have syntax errors. Validate it at https://www.yamllint.com/'
+      );
     }
 
     return issues;

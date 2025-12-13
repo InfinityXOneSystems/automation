@@ -43,7 +43,9 @@ export class GitHubClient {
       } catch (error: any) {
         if (error.status === 404) {
           throw new Error(
-            `Organization '${this.config.organization}' not found or you don't have access`
+            `Organization '${this.config.organization}' not found or you don't have access. ` +
+            `Ensure your GitHub token has 'read:org' permission and you are a member of the organization. ` +
+            `You can check your token permissions at https://github.com/settings/tokens`
           );
         }
         throw error;
