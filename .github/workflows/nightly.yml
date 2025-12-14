@@ -1,0 +1,41 @@
+name: Nightly Validation
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  full-validation:
+    name: Full Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run full validation
+        run: npm run prime:validate
+      
+      - name: Generate scoreboard
+        run: npm run prime:scoreboard
+      
+      - name: Update run ledger
+        run: npm run prime:ledger add --module="validation" --action="nightly-validation" --status="success"
+      
+      - name: Upload reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: validation-reports
+          path: |
+            docs/system/FINAL_VALIDATION_REPORT.*
+            docs/system/SCOREBOARD.*
+            docs/system/RUN_LEDGER.json

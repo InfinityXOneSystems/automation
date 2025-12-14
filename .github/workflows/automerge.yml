@@ -1,0 +1,58 @@
+name: Auto-Merge
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+jobs:
+  auto-merge:
+    name: Auto-Merge Safe PRs
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'automerge') || contains(github.event.pull_request.labels.*.name, 'infinity-prime')
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run risk gate
+        id: risk-gate
+        run: |
+          npm run prime:risk-gate
+          TIER=$(jq -r '.assessment.tier' docs/system/RISK_GATE_REPORT.json)
+          echo "tier=$TIER" >> $GITHUB_OUTPUT
+      
+      - name: Check if safe to merge
+        id: check-safe
+        run: |
+          if [ "${{ steps.risk-gate.outputs.tier }}" = "SAFE" ]; then
+            echo "safe=true" >> $GITHUB_OUTPUT
+          else
+            echo "safe=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Auto-merge PR
+        if: steps.check-safe.outputs.safe == 'true'
+        uses: pascalgn/automerge-action@v0.15.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_LABELS: automerge,infinity-prime
+          MERGE_METHOD: squash
+      
+      - name: Comment on PR
+        if: steps.check-safe.outputs.safe == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ Auto-merge blocked: Risk tier is ${{ steps.risk-gate.outputs.tier }}. Review required.'
+            })

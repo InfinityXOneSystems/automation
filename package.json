@@ -10,7 +10,14 @@
     "disable": "node dist/cli.js disable",
     "restore": "node dist/cli.js restore",
     "report": "node dist/cli.js report",
-    "dev": "tsc && node dist/cli.js"
+    "dev": "tsc && node dist/cli.js",
+    "prime:validate": "tsc && node dist/scripts/prime/full-validation.js",
+    "prime:risk-gate": "tsc && node dist/scripts/prime/risk-gate.js",
+    "prime:todo": "tsc && node dist/scripts/prime/todo-runner.js",
+    "prime:scoreboard": "tsc && node dist/scripts/prime/scoreboard.js",
+    "prime:ledger": "tsc && node dist/scripts/prime/run-ledger.js",
+    "prime:create-repo": "tsc && node dist/scripts/prime/create-repo.js",
+    "prime:build-system": "tsc && node dist/scripts/prime/build-system.js"
   },
   "keywords": [
     "github",

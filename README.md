@@ -2,6 +2,41 @@
 
 A centralized library for all automation templates and tools used across the organization.
 
+## 🌟 Infinity Prime - Autonomous System Builder
+
+This repository is the **command center** for Infinity Prime, our zero-human-approval autonomous system builder that manages 45+ repositories across the organization.
+
+### Key Features
+
+- 🤖 **Autonomous Operations** - Self-managing CI/CD with risk-based auto-merge
+- 🔒 **Risk Gate System** - Three-tier safety system (SAFE/CAUTION/BLOCKED)
+- 📊 **Workflow Analysis** - Automated detection and management of failing workflows
+- 🏗️ **System Builder** - Multi-repo orchestration from industry templates
+- 📈 **Continuous Monitoring** - Real-time metrics and scoreboard across all repos
+- ✅ **Full Validation** - Complete pipeline: Lint → Typecheck → Tests → Build → Smoke
+
+### Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run risk assessment
+npm run prime:risk-gate
+
+# Run full validation
+npm run prime:validate
+
+# View scoreboard
+npm run prime:scoreboard
+
+# Analyze workflows across org
+npm run analyze
+```
+
 ## Overview
 
 This repository serves as:
@@ -13,6 +48,109 @@ This repository integrates with:
 
 - **[/foundation](https://github.com/InfinityXOneSystems/foundation)** - Core infrastructure and foundational components
 - **[codex](https://github.com/InfinityXOneSystems/codex)** - Knowledge base and documentation repository
+
+---
+
+## 🚀 Infinity Prime Modules
+
+### Core Automation Modules
+
+#### 1. Risk Gate (`prime:risk-gate`)
+Three-tier risk assessment system for autonomous operations.
+
+- **SAFE**: Auto-merge, auto-deploy to staging
+- **CAUTION**: Review required, can deploy to staging
+- **BLOCKED**: Human intervention required
+
+```bash
+npm run prime:risk-gate
+```
+
+Outputs: `docs/system/RISK_GATE_REPORT.{md,json}`
+
+#### 2. Full Validation (`prime:validate`)
+Complete validation pipeline: Lint → Typecheck → Tests → Contract → Build → Smoke
+
+```bash
+npm run prime:validate
+```
+
+Outputs: `docs/system/FINAL_VALIDATION_REPORT.{md,json}`
+
+#### 3. Scoreboard (`prime:scoreboard`)
+Tracks metrics across all repositories: Reliability, Correctness, Consistency, Safety
+
+```bash
+npm run prime:scoreboard
+```
+
+Outputs: `docs/system/SCOREBOARD.{md,json}`
+
+#### 4. Run Ledger (`prime:ledger`)
+Append-only audit trail for all automation runs
+
+```bash
+npm run prime:ledger view
+npm run prime:ledger add --module="validation" --action="test" --status="success"
+```
+
+Outputs: `docs/system/RUN_LEDGER.json`
+
+#### 5. TODO Runner (`prime:todo`)
+Executes bounded tasks from TODO.yaml (60min max, 3 cycles max)
+
+```bash
+npm run prime:todo              # Dry run
+npm run prime:todo --execute    # Execute tasks
+```
+
+Outputs: `docs/system/TODO_STATUS.json`
+
+### Multi-Repo Automation
+
+#### 6. Create Repo (`prime:create-repo`)
+Creates new repositories with Infinity Prime pre-configured
+
+```bash
+npm run prime:create-repo -- \
+  --name="my-service" \
+  --template="node-api" \
+  --integrate-foundation \
+  --integrate-codex
+```
+
+**Available Templates:**
+- `node-api` - Express/Fastify API
+- `python-api` - FastAPI server
+- `react-spa` - Vite + React
+- `next-app` - Next.js 14+
+- `rust-service` - Actix/Axum
+- `taxonomy` - AI model taxonomy
+
+#### 7. Build System (`prime:build-system`)
+Multi-repo orchestration from industry templates
+
+```bash
+npm run prime:build-system -- \
+  --config=templates/industries/saas.yaml \
+  --execute
+```
+
+**Industry Templates:**
+- `saas.yaml` - Multi-tenant SaaS platform
+- `healthcare.yaml` - HIPAA-compliant healthcare system
+- `ecommerce.yaml` - PCI-DSS e-commerce platform
+- `financial.yaml` - SOC2 financial services
+
+### Dashboard
+
+View the complete system dashboard:
+
+```bash
+cat docs/system/DASHBOARD.md
+```
+
+Or view online at: [Dashboard](./docs/system/DASHBOARD.md)
 
 ---
 
