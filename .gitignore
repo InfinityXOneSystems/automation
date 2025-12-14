@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+
+# Environment variables
+.env
+.env.local
+
+# Output files
+workflow-analysis-report.json
+workflow-analysis-report.md
+disabled-workflows-manifest.json
+audit-log.json
+workflow-backups/
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
