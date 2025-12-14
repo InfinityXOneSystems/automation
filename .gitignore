@@ -17,6 +17,16 @@ disabled-workflows-manifest.json
 audit-log.json
 workflow-backups/
 
+# Infinity Prime generated reports
+docs/system/RISK_GATE_REPORT.*
+docs/system/FINAL_VALIDATION_REPORT.*
+docs/system/SCOREBOARD.json
+docs/system/SCOREBOARD.md
+docs/system/RUN_LEDGER.json
+docs/system/TODO_STATUS.json
+docs/system/repo-spec-*.json
+docs/system/build-plan-*.json
+
 # Temporary files
 *.tmp
 *.log

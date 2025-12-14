@@ -5,6 +5,9 @@ on:
     - cron: '0 2 * * *'  # 2 AM UTC daily
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   full-validation:
     name: Full Validation

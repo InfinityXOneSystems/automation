@@ -65,6 +65,9 @@ class RiskGate {
 
   /**
    * Gather metrics for risk assessment
+   * Note: Currently uses placeholder/example values.
+   * In production, these would integrate with actual test runners,
+   * security scanners, coverage tools, and git diff analysis.
    */
   private async gatherMetrics() {
     // Check if tests pass (look for test results or workflow status)

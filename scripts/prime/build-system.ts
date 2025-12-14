@@ -72,6 +72,8 @@ class SystemBuilder {
 
   /**
    * Load config file (YAML or JSON)
+   * Note: Uses simplified YAML parser for demonstration.
+   * For production use, the js-yaml dependency is available in package.json
    */
   private loadConfig(configPath: string): SystemConfig {
     const content = readFileSync(configPath, 'utf-8');
