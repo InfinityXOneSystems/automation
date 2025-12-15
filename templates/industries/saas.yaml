@@ -1,0 +1,26 @@
+name: saas-platform
+description: Multi-tenant SaaS platform with API, frontend, and services
+
+repos:
+  - name: api-gateway
+    template: node-api
+    foundation: true
+    codex: true
+    
+  - name: user-service
+    template: node-api
+    depends:
+      - api-gateway
+    foundation: true
+    
+  - name: billing-service
+    template: node-api
+    depends:
+      - api-gateway
+    foundation: true
+    
+  - name: frontend
+    template: next-app
+    depends:
+      - api-gateway
+    codex: true

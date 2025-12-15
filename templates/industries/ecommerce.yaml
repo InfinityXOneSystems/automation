@@ -1,0 +1,23 @@
+name: ecommerce-platform
+description: PCI-DSS compliant e-commerce platform
+
+repos:
+  - name: storefront
+    template: next-app
+    codex: true
+    
+  - name: product-api
+    template: node-api
+    foundation: true
+    
+  - name: order-service
+    template: node-api
+    depends:
+      - product-api
+    foundation: true
+    
+  - name: payment-service
+    template: node-api
+    depends:
+      - order-service
+    foundation: true

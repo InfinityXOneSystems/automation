@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "name": "Infinity Prime Automation Contract",
+  "description": "Contract system for zero-human-approval autonomous operations",
+  "created": "2024-12-14T23:08:00.000Z",
+  "tiers": {
+    "SAFE": {
+      "description": "Fully automated, no approval needed",
+      "criteria": [
+        "All tests pass",
+        "No security vulnerabilities",
+        "No breaking changes",
+        "Code coverage >= 80%"
+      ],
+      "actions": ["auto-merge", "auto-deploy-staging"]
+    },
+    "CAUTION": {
+      "description": "Needs review but can auto-deploy to staging",
+      "criteria": [
+        "Tests pass but coverage < 80%",
+        "Minor security issues",
+        "Non-critical breaking changes"
+      ],
+      "actions": ["review-required", "auto-deploy-staging"]
+    },
+    "BLOCKED": {
+      "description": "Must not proceed without human intervention",
+      "criteria": [
+        "Tests fail",
+        "Critical security vulnerabilities",
+        "Major breaking changes",
+        "Protected paths modified"
+      ],
+      "actions": ["block-merge", "block-deploy", "alert-maintainers"]
+    }
+  },
+  "protected_paths": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/deploy.yml",
+    "automation_contract/",
+    "package.json",
+    "tsconfig.json"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@infinityxonesystems/workflow-analyzer",
+  "version": "1.0.0",
+  "description": "Analyze and manage GitHub Actions workflows across InfinityXOneSystems repositories",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "analyze": "node dist/cli.js analyze",
+    "disable": "node dist/cli.js disable",
+    "restore": "node dist/cli.js restore",
+    "report": "node dist/cli.js report",
+    "dev": "tsc && node dist/cli.js",
+    "prime:validate": "tsc && node dist/scripts/prime/full-validation.js",
+    "prime:risk-gate": "tsc && node dist/scripts/prime/risk-gate.js",
+    "prime:todo": "tsc && node dist/scripts/prime/todo-runner.js",
+    "prime:scoreboard": "tsc && node dist/scripts/prime/scoreboard.js",
+    "prime:ledger": "tsc && node dist/scripts/prime/run-ledger.js",
+    "prime:create-repo": "tsc && node dist/scripts/prime/create-repo.js",
+    "prime:build-system": "tsc && node dist/scripts/prime/build-system.js"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "workflow",
+    "automation",
+    "ci-cd"
+  ],
+  "author": "InfinityXOneSystems",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "js-yaml": "^4.1.0",
+    "markdown-table": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  }
+}

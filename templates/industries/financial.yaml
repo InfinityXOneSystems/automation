@@ -1,0 +1,26 @@
+name: financial-platform
+description: SOC2-compliant financial services platform
+
+repos:
+  - name: banking-api
+    template: node-api
+    foundation: true
+    codex: true
+    
+  - name: transaction-service
+    template: rust-service
+    depends:
+      - banking-api
+    foundation: true
+    
+  - name: compliance-service
+    template: node-api
+    depends:
+      - banking-api
+    foundation: true
+    
+  - name: customer-portal
+    template: next-app
+    depends:
+      - banking-api
+    codex: true

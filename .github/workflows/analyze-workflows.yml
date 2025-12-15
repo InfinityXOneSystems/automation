@@ -1,0 +1,111 @@
+name: Weekly Workflow Analysis
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      disable_workflows:
+        description: 'Automatically disable failing workflows'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  analyze-workflows:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build TypeScript
+        run: npm run build
+      
+      - name: Run workflow analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_ANALYZER_TOKEN }}
+        run: npm run analyze
+      
+      - name: Check for failing workflows
+        id: check-failures
+        run: |
+          FAILURES=$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('workflow-analysis-report.json')); console.log(r.failingWorkflows)")
+          echo "failures=$FAILURES" >> $GITHUB_OUTPUT
+          echo "Found $FAILURES failing workflows"
+      
+      - name: Disable failing workflows (if requested)
+        if: github.event.inputs.disable_workflows == 'true' && steps.check-failures.outputs.failures > 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_ANALYZER_TOKEN }}
+        run: npm run disable -- --confirm
+      
+      - name: Upload analysis reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-analysis-reports
+          path: |
+            workflow-analysis-report.json
+            workflow-analysis-report.md
+            audit-log.json
+          retention-days: 90
+      
+      - name: Upload disabled workflows manifest
+        if: github.event.inputs.disable_workflows == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: disabled-workflows-manifest
+          path: |
+            disabled-workflows-manifest.json
+            workflow-backups/
+          retention-days: 365
+      
+      - name: Create issue if many failures
+        if: steps.check-failures.outputs.failures > 20
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const failures = ${{ steps.check-failures.outputs.failures }};
+            const fs = require('fs');
+            const report = fs.readFileSync('workflow-analysis-report.md', 'utf8');
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `⚠️ High number of failing workflows detected: ${failures}`,
+              body: `## Workflow Analysis Report\n\nFound ${failures} failing workflows.\n\n### Action Required\n\nReview the analysis report and consider:\n1. Fixing the underlying issues\n2. Disabling failing workflows temporarily\n3. Investigating root causes\n\n### Full Report\n\nSee artifacts for complete analysis.\n\n---\n\n${report.substring(0, 20000)}`,
+              labels: ['ci', 'workflows', 'automation']
+            });
+      
+      - name: Comment on success
+        if: steps.check-failures.outputs.failures == 0
+        run: |
+          echo "✅ All workflows are healthy! No action required."
+      
+      - name: Summary
+        run: |
+          echo "## Workflow Analysis Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          node -e "
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('workflow-analysis-report.json'));
+            console.log(\`- **Total Repositories**: \${report.totalRepositories}\`);
+            console.log(\`- **Total Workflows**: \${report.totalWorkflows}\`);
+            console.log(\`- **Failing Workflows**: \${report.failingWorkflows}\`);
+            console.log(\`- **Success Rate**: \${report.successRate}%\`);
+            console.log(\`- **Total Runs (7 days)**: \${report.summary.totalRuns}\`);
+          " >> $GITHUB_STEP_SUMMARY
