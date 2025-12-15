@@ -8,7 +8,7 @@
  * - Outputs status to docs/system/TODO_STATUS.json
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 interface TodoTask {
