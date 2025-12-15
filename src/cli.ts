@@ -109,7 +109,7 @@ program
       const dryRun = !options.confirm;
       const disabler = new WorkflowDisabler(config, auditLogger);
 
-      const manifest = await disabler.disableWorkflows(report, dryRun);
+      await disabler.disableWorkflows(report, dryRun);
 
       if (dryRun) {
         console.log('\nℹ️  This was a dry run. No changes were made.');

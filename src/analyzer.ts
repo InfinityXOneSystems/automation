@@ -2,7 +2,6 @@ import yaml from 'js-yaml';
 import {
   Config,
   WorkflowAnalysis,
-  WorkflowRun,
   RepositoryAnalysis,
   AnalysisReport,
 } from './types.js';
