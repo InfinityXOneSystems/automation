@@ -1,0 +1,26 @@
+name: healthcare-platform
+description: HIPAA-compliant healthcare system
+
+repos:
+  - name: patient-api
+    template: node-api
+    foundation: true
+    codex: true
+    
+  - name: fhir-service
+    template: node-api
+    depends:
+      - patient-api
+    foundation: true
+    
+  - name: ehr-integration
+    template: node-api
+    depends:
+      - patient-api
+    foundation: true
+    
+  - name: patient-portal
+    template: react-spa
+    depends:
+      - patient-api
+    codex: true
