@@ -11,21 +11,6 @@
 import { writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
-interface TodoTask {
-  id: string;
-  description: string;
-  priority: 'high' | 'medium' | 'low';
-  estimatedMinutes?: number;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  cycles?: number;
-}
-
-interface TodoConfig {
-  tasks: TodoTask[];
-  maxDuration: number;
-  maxCycles: number;
-}
-
 class TodoRunner {
   private configPath: string;
   private outputPath: string;

@@ -7,6 +7,7 @@
  */
 
 import { execSync } from 'child_process';
+import fs from 'fs-extra';
 import { writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
@@ -98,7 +99,7 @@ class FullValidation {
         await this.runContractCheck(step);
       } else if (step.command) {
         // Check if the command exists in package.json
-        const hasCommand = this.checkCommandExists(step.command);
+        const hasCommand = await this.checkCommandExists(step.command);
         
         if (!hasCommand) {
           step.status = 'skipped';
@@ -129,9 +130,9 @@ class FullValidation {
   /**
    * Check if command exists in package.json scripts
    */
-  private checkCommandExists(command: string): boolean {
+  private async checkCommandExists(command: string): Promise<boolean> {
     try {
-      const packageJson = require(join(process.cwd(), 'package.json'));
+      const packageJson = await fs.readJson(join(process.cwd(), 'package.json'));
       const scriptName = command.replace('npm run ', '').replace('npm ', '');
       
       // Check if it's a built-in npm command or exists in scripts
@@ -156,7 +157,7 @@ class FullValidation {
     }
 
     try {
-      const contract = require(contractPath);
+      const contract = await fs.readJson(contractPath);
       
       // Validate contract structure
       if (!contract.version || !contract.tiers) {
